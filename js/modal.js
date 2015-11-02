@@ -17,7 +17,7 @@
     this.options             = options
     this.$body               = $(document.body)
     this.$element            = $(element)
-    this.$dialog             = this.$element.find('.modal-dialog')
+    this.$dialog             = this.$element.find('.nextlot-modal-dialog')
     this.$backdrop           = null
     this.isShown             = null
     this.originalBodyPad     = null
@@ -26,9 +26,9 @@
 
     if (this.options.remote) {
       this.$element
-        .find('.modal-content')
+        .find('.nextlot-modal-content')
         .load(this.options.remote, $.proxy(function () {
-          this.$element.trigger('loaded.bs.modal')
+          this.$element.trigger('loaded.nextlot.modal')
         }, this))
     }
   }
@@ -50,7 +50,7 @@
 
   Modal.prototype.show = function (_relatedTarget) {
     var that = this
-    var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+    var e    = $.Event('show.nextlot.modal', { relatedTarget: _relatedTarget })
 
     this.$element.trigger(e)
 
@@ -65,10 +65,10 @@
     this.escape()
     this.resize()
 
-    this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
+    this.$element.on('click.dismiss.nextlot.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
 
-    this.$dialog.on('mousedown.dismiss.bs.modal', function () {
-      that.$element.one('mouseup.dismiss.bs.modal', function (e) {
+    this.$dialog.on('mousedown.dismiss.nextlot.modal', function () {
+      that.$element.one('mouseup.dismiss.nextlot.modal', function (e) {
         if ($(e.target).is(that.$element)) that.ignoreBackdropClick = true
       })
     })
@@ -94,7 +94,7 @@
 
       that.enforceFocus()
 
-      var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+      var e = $.Event('shown.nextlot.modal', { relatedTarget: _relatedTarget })
 
       transition ?
         that.$dialog // wait for modal to slide in
@@ -109,7 +109,7 @@
   Modal.prototype.hide = function (e) {
     if (e) e.preventDefault()
 
-    e = $.Event('hide.bs.modal')
+    e = $.Event('hide.nextlot.modal')
 
     this.$element.trigger(e)
 
@@ -120,14 +120,14 @@
     this.escape()
     this.resize()
 
-    $(document).off('focusin.bs.modal')
+    $(document).off('focusin.nextlot.modal')
 
     this.$element
       .removeClass('in')
-      .off('click.dismiss.bs.modal')
-      .off('mouseup.dismiss.bs.modal')
+      .off('click.dismiss.nextlot.modal')
+      .off('mouseup.dismiss.nextlot.modal')
 
-    this.$dialog.off('mousedown.dismiss.bs.modal')
+    this.$dialog.off('mousedown.dismiss.nextlot.modal')
 
     $.support.transition && this.$element.hasClass('fade') ?
       this.$element
@@ -138,8 +138,8 @@
 
   Modal.prototype.enforceFocus = function () {
     $(document)
-      .off('focusin.bs.modal') // guard against infinite focus loop
-      .on('focusin.bs.modal', $.proxy(function (e) {
+      .off('focusin.nextlot.modal') // guard against infinite focus loop
+      .on('focusin.nextlot.modal', $.proxy(function (e) {
         if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
           this.$element.trigger('focus')
         }
@@ -148,19 +148,19 @@
 
   Modal.prototype.escape = function () {
     if (this.isShown && this.options.keyboard) {
-      this.$element.on('keydown.dismiss.bs.modal', $.proxy(function (e) {
+      this.$element.on('keydown.dismiss.nextlot.modal', $.proxy(function (e) {
         e.which == 27 && this.hide()
       }, this))
     } else if (!this.isShown) {
-      this.$element.off('keydown.dismiss.bs.modal')
+      this.$element.off('keydown.dismiss.nextlot.modal')
     }
   }
 
   Modal.prototype.resize = function () {
     if (this.isShown) {
-      $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
+      $(window).on('resize.nextlot.modal', $.proxy(this.handleUpdate, this))
     } else {
-      $(window).off('resize.bs.modal')
+      $(window).off('resize.nextlot.modal')
     }
   }
 
@@ -171,7 +171,7 @@
       that.$body.removeClass('modal-open')
       that.resetAdjustments()
       that.resetScrollbar()
-      that.$element.trigger('hidden.bs.modal')
+      that.$element.trigger('hidden.nextlot.modal')
     })
   }
 
@@ -191,7 +191,7 @@
         .addClass('modal-backdrop ' + animate)
         .appendTo(this.$body)
 
-      this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
+      this.$element.on('click.dismiss.nextlot.modal', $.proxy(function (e) {
         if (this.ignoreBackdropClick) {
           this.ignoreBackdropClick = false
           return
@@ -290,10 +290,10 @@
   function Plugin(option, _relatedTarget) {
     return this.each(function () {
       var $this   = $(this)
-      var data    = $this.data('bs.modal')
+      var data    = $this.data('nextlot.modal')
       var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
 
-      if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
+      if (!data) $this.data('nextlot.modal', (data = new Modal(this, options)))
       if (typeof option == 'string') data[option](_relatedTarget)
       else if (options.show) data.show(_relatedTarget)
     })
@@ -317,17 +317,17 @@
   // MODAL DATA-API
   // ==============
 
-  $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
+  $(document).on('click.nextlot.modal.data-api', '[data-toggle="modal"]', function (e) {
     var $this   = $(this)
     var href    = $this.attr('href')
     var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
-    var option  = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+    var option  = $target.data('nextlot.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
 
     if ($this.is('a')) e.preventDefault()
 
-    $target.one('show.bs.modal', function (showEvent) {
+    $target.one('show.nextlot.modal', function (showEvent) {
       if (showEvent.isDefaultPrevented()) return // only register focus restorer if modal will actually get shown
-      $target.one('hidden.bs.modal', function () {
+      $target.one('hidden.nextlot.modal', function () {
         $this.is(':visible') && $this.trigger('focus')
       })
     })
