@@ -13,7 +13,7 @@
   // MODAL CLASS DEFINITION
   // ======================
 
-  var Modal = function (element, options) {
+  var Nextlotmodal = function (element, options) {
     this.options             = options
     this.$body               = $(document.body)
     this.$element            = $(element)
@@ -33,22 +33,22 @@
     }
   }
 
-  Modal.VERSION  = '3.3.5'
+  Nextlotmodal.VERSION  = '3.3.5'
 
-  Modal.TRANSITION_DURATION = 300
-  Modal.BACKDROP_TRANSITION_DURATION = 150
+  Nextlotmodal.TRANSITION_DURATION = 300
+  Nextlotmodal.BACKDROP_TRANSITION_DURATION = 150
 
-  Modal.DEFAULTS = {
+  Nextlotmodal.DEFAULTS = {
     backdrop: true,
     keyboard: true,
     show: true
   }
 
-  Modal.prototype.toggle = function (_relatedTarget) {
+  Nextlotmodal.prototype.toggle = function (_relatedTarget) {
     return this.isShown ? this.hide() : this.show(_relatedTarget)
   }
 
-  Modal.prototype.show = function (_relatedTarget) {
+  Nextlotmodal.prototype.show = function (_relatedTarget) {
     var that = this
     var e    = $.Event('show.nextlot.modal', { relatedTarget: _relatedTarget })
 
@@ -101,12 +101,12 @@
           .one('bsTransitionEnd', function () {
             that.$element.trigger('focus').trigger(e)
           })
-          .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+          .emulateTransitionEnd(Nextlotmodal.TRANSITION_DURATION) :
         that.$element.trigger('focus').trigger(e)
     })
   }
 
-  Modal.prototype.hide = function (e) {
+  Nextlotmodal.prototype.hide = function (e) {
     if (e) e.preventDefault()
 
     e = $.Event('hide.nextlot.modal')
@@ -132,11 +132,11 @@
     $.support.transition && this.$element.hasClass('fade') ?
       this.$element
         .one('bsTransitionEnd', $.proxy(this.hideModal, this))
-        .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+        .emulateTransitionEnd(Nextlotmodal.TRANSITION_DURATION) :
       this.hideModal()
   }
 
-  Modal.prototype.enforceFocus = function () {
+  Nextlotmodal.prototype.enforceFocus = function () {
     $(document)
       .off('focusin.nextlot.modal') // guard against infinite focus loop
       .on('focusin.nextlot.modal', $.proxy(function (e) {
@@ -146,7 +146,7 @@
       }, this))
   }
 
-  Modal.prototype.escape = function () {
+  Nextlotmodal.prototype.escape = function () {
     if (this.isShown && this.options.keyboard) {
       this.$element.on('keydown.dismiss.nextlot.modal', $.proxy(function (e) {
         e.which == 27 && this.hide()
@@ -156,7 +156,7 @@
     }
   }
 
-  Modal.prototype.resize = function () {
+  Nextlotmodal.prototype.resize = function () {
     if (this.isShown) {
       $(window).on('resize.nextlot.modal', $.proxy(this.handleUpdate, this))
     } else {
@@ -164,7 +164,7 @@
     }
   }
 
-  Modal.prototype.hideModal = function () {
+  Nextlotmodal.prototype.hideModal = function () {
     var that = this
     this.$element.hide()
     this.backdrop(function () {
@@ -175,12 +175,12 @@
     })
   }
 
-  Modal.prototype.removeBackdrop = function () {
+  Nextlotmodal.prototype.removeBackdrop = function () {
     this.$backdrop && this.$backdrop.remove()
     this.$backdrop = null
   }
 
-  Modal.prototype.backdrop = function (callback) {
+  Nextlotmodal.prototype.backdrop = function (callback) {
     var that = this
     var animate = this.$element.hasClass('fade') ? 'fade' : ''
 
@@ -211,7 +211,7 @@
       doAnimate ?
         this.$backdrop
           .one('bsTransitionEnd', callback)
-          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+          .emulateTransitionEnd(Nextlotmodal.BACKDROP_TRANSITION_DURATION) :
         callback()
 
     } else if (!this.isShown && this.$backdrop) {
@@ -224,7 +224,7 @@
       $.support.transition && this.$element.hasClass('fade') ?
         this.$backdrop
           .one('bsTransitionEnd', callbackRemove)
-          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+          .emulateTransitionEnd(Nextlotmodal.BACKDROP_TRANSITION_DURATION) :
         callbackRemove()
 
     } else if (callback) {
@@ -234,11 +234,11 @@
 
   // these following methods are used to handle overflowing modals
 
-  Modal.prototype.handleUpdate = function () {
+  Nextlotmodal.prototype.handleUpdate = function () {
     this.adjustDialog()
   }
 
-  Modal.prototype.adjustDialog = function () {
+  Nextlotmodal.prototype.adjustDialog = function () {
     var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
 
     this.$element.css({
@@ -247,14 +247,14 @@
     })
   }
 
-  Modal.prototype.resetAdjustments = function () {
+  Nextlotmodal.prototype.resetAdjustments = function () {
     this.$element.css({
       paddingLeft: '',
       paddingRight: ''
     })
   }
 
-  Modal.prototype.checkScrollbar = function () {
+  Nextlotmodal.prototype.checkScrollbar = function () {
     var fullWindowWidth = window.innerWidth
     if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
       var documentElementRect = document.documentElement.getBoundingClientRect()
@@ -264,17 +264,17 @@
     this.scrollbarWidth = this.measureScrollbar()
   }
 
-  Modal.prototype.setScrollbar = function () {
+  Nextlotmodal.prototype.setScrollbar = function () {
     var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
     this.originalBodyPad = document.body.style.paddingRight || ''
     if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
   }
 
-  Modal.prototype.resetScrollbar = function () {
+  Nextlotmodal.prototype.resetScrollbar = function () {
     this.$body.css('padding-right', this.originalBodyPad)
   }
 
-  Modal.prototype.measureScrollbar = function () { // thx walsh
+  Nextlotmodal.prototype.measureScrollbar = function () { // thx walsh
     var scrollDiv = document.createElement('div')
     scrollDiv.className = 'modal-scrollbar-measure'
     this.$body.append(scrollDiv)
@@ -291,7 +291,7 @@
     return this.each(function () {
       var $this   = $(this)
       var data    = $this.data('nextlot.modal')
-      var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
+      var options = $.extend({}, Nextlotmodal.DEFAULTS, $this.data(), typeof option == 'object' && option)
 
       if (!data) $this.data('nextlot.modal', (data = new Modal(this, options)))
       if (typeof option == 'string') data[option](_relatedTarget)
@@ -301,15 +301,15 @@
 
   var old = $.fn.modal
 
-  $.fn.modal             = Plugin
-  $.fn.modal.Constructor = Modal
+  $.fn.nextlotmodal             = Plugin
+  $.fn.nextlotmodal.Constructor = Modal
 
 
   // MODAL NO CONFLICT
   // =================
 
-  $.fn.modal.noConflict = function () {
-    $.fn.modal = old
+  $.fn.nextlotmodal.noConflict = function () {
+    $.fn.nextlotmodal = old
     return this
   }
 
